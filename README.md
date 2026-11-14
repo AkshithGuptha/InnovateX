@@ -1,16 +1,40 @@
 # InnovateX
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Ideas. Research. Perspective.**
 
-Currently, two official plugins are available:
+InnovateX is a digital technology magazine concept exploring emerging technologies, research, engineering, artificial intelligence and the people shaping what comes next.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Built with
+- React 19
+- Vite
+- CSS with component-scoped styles and responsive layouts
 
-## React Compiler
+## Getting started
+1. Install dependencies: npm install
+2. Start the development server: npm run dev
+3. Open the local URL printed by Vite.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Available scripts
+| Command | Description |
+| --- | --- |
+| npm run dev | Start the development server |
+| npm run build | Create a production build |
+| npm run preview | Preview the production build |
+| npm run lint | Run ESLint |
 
-## Expanding the ESLint configuration
+## Project structure
+- src/components/ — page sections and their styles
+- src/App.jsx — page composition
+- src/index.css — global design tokens and shared styles
+- src/main.jsx — React entry point
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Current scope
+- Responsive navigation with a mobile menu
+- Dark and light colour themes
+- Editorial landing-page hero and magazine sections
+- Sample issue, article and team content
+
+## Before launch
+Issue, article, team and contact details are currently sample content. Replace them with verified publication details and working destinations. The newsletter form is presentation-only until it is connected to a mailing-list service.
+
+Run npm run build before deploying. The production output is generated in dist/.
