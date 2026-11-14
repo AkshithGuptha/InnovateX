@@ -151,7 +151,7 @@ create policy "admins delete site settings" on public.site_settings
 
 -- Explicit Data API privileges. RLS still decides which rows are visible or writable.
 grant usage on schema public to anon, authenticated;
-revoke all on table public.admin_profiles from anon;
+revoke all on table public.admin_profiles from anon, authenticated;
 grant select on table public.admin_profiles to authenticated;
 revoke all on table public.issues, public.articles, public.team_members, public.site_settings from anon;
 grant select on table public.issues, public.articles, public.team_members, public.site_settings to anon, authenticated;
