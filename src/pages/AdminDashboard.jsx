@@ -1,6 +1,6 @@
 import { useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase,uploadPublicFile } from '../lib/supabase';
+import { supabase,uploadPublicFile,isSupabaseConfigured } from '../lib/supabase';
 import './Admin.css';
 const issueBlank={title:'',edition:'',description:'',cover_url:'',pdf_url:'',published:false};
 const articleBlank={title:'',slug:'',category:'',excerpt:'',body:'',author:'',read_time:'',image_url:'',published:false};
@@ -15,7 +15,7 @@ export default function AdminDashboard(){
   if(i.error||a.error||t.error)setNotice((i.error||a.error||t.error).message);
   setRecords({issues:i.data||[],articles:a.data||[],team_members:t.data||[]});if(s.data?.value)setSettings({...settingsBlank,...s.data.value});
  };
- useEffect(()=>{let active=true;supabase.auth.getSession().then(async({data})=>{if(!active)return;if(!data.session){navigate('/admin/login',{replace:true});return;}
+ useEffect(()=>{if(!supabase)return undefined;let active=true;supabase.auth.getSession().then(async({data})=>{if(!active)return;if(!data.session){navigate('/admin/login',{replace:true});return;}
   const {data:p}=await supabase.from('admin_profiles').select('role').eq('id',data.session.user.id).maybeSingle();
   if(p?.role!=='admin'){await supabase.auth.signOut();navigate('/admin/login',{replace:true});return;}setUser(data.session.user);await load();});
   const {data:listener}=supabase.auth.onAuthStateChange((_e,session)=>{if(!session)navigate('/admin/login',{replace:true});});
@@ -37,6 +37,7 @@ export default function AdminDashboard(){
  const saveSettings=async e=>{e.preventDefault();setBusy(true);const{error}=await supabase.from('site_settings').upsert({key:'site',value:settings,updated_at:new Date().toISOString()});setNotice(error?error.message:'Homepage content updated.');setBusy(false);};
  const signOut=async()=>{await supabase.auth.signOut();navigate('/admin/login',{replace:true});};
  const field=(key,label,area=false)=><label key={key}>{label}{area?<textarea rows="3" value={form[key]||''} onChange={e=>change(key,e.target.value)}/>:<input value={form[key]||''} onChange={e=>change(key,e.target.value)}/>}</label>;
+ if(!isSupabaseConfigured)return <main className="admin-shell"><section className="admin-login-card"><span className="admin-eyebrow">SETUP REQUIRED</span><h1>Connect <span>Supabase.</span></h1><p>Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to the Vercel environment, then redeploy.</p><a className="btn btn-primary" href="/">Return to InnovateX</a></section></main>;
  return <main className="admin-dashboard"><header className="admin-topbar"><a className="logo" href="/">innovate<span>x</span><i>.</i></a><div><span>{user?.email}</span><button className="btn btn-outline" onClick={signOut}>Sign out</button></div></header>
   <div className="admin-layout"><aside className="admin-sidebar"><span className="admin-eyebrow">PUBLICATION CMS</span><h1>Control<br/><span>room.</span></h1>
    {[['issues','Magazine issues'],['articles','Articles'],['team_members','Editorial team'],['settings','Homepage content']].map(([key,label])=><button key={key} className={section===key?'active':''} onClick={()=>{setSection(key);startNew();setNotice('');}}>{label}<span>↗</span></button>)}
