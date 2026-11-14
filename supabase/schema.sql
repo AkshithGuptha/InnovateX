@@ -25,3 +25,21 @@ create policy "admins update publication media" on storage.objects for update to
 create policy "admins delete publication media" on storage.objects for delete to authenticated using(bucket_id in('covers','magazines','article-images','team-photos') and public.is_innovatex_admin());
 -- Create an admin: create a user in Supabase Authentication > Users, then insert its UUID:
 -- insert into public.admin_profiles(id,role) values('AUTH-USER-UUID','admin');
+
+-- Initial editable homepage copy. Change it later from /admin.
+insert into public.site_settings(key, value) values ('site', '{
+  "hero_eyebrow":"THE IDEAS SHAPING WHAT’S NEXT",
+  "hero_title":"Curiosity is the spark. Innovation is the future.",
+  "hero_description":"A closer look at the breakthroughs, bold thinkers and emerging technologies moving our world forward.",
+  "about_title":"The future, unpacked.",
+  "about_description":"InnovateX is a digital space for curious minds, bringing technology, engineering, artificial intelligence and human ingenuity into one thoughtful conversation.",
+  "vision":"Make the next wave of innovation easier to understand, question and imagine.",
+  "mission":"Explore meaningful ideas through clear stories, useful context and fresh perspectives.",
+  "footer_description":"Ideas. Research. Perspective.",
+  "focus_areas":[
+    {"title":"Emerging technology","detail":"Understand the tools and ideas redefining what is possible."},
+    {"title":"Research & discovery","detail":"Make complex breakthroughs easier to explore and discuss."},
+    {"title":"Human ingenuity","detail":"Meet the people turning ambitious questions into real progress."},
+    {"title":"Ideas in perspective","detail":"Look beyond the headlines to the impact that matters."}
+  ]
+}'::jsonb) on conflict(key) do nothing;
