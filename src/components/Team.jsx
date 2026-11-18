@@ -1,64 +1,6 @@
+import {useSiteData} from '../context/SiteDataContext';
+import ContentState from './ContentState';
 import './Team.css';
-
-const Team = () => {
-  const team = [
-    {
-      id: 1,
-      name: "Dr. Alice Morgan",
-      role: "Editor-in-Chief",
-      initials: "AM"
-    },
-    {
-      id: 2,
-      name: "David Chen",
-      role: "Managing Editor",
-      initials: "DC"
-    },
-    {
-      id: 3,
-      name: "Sarah Jenkins",
-      role: "Lead Designer",
-      initials: "SJ"
-    },
-    {
-      id: 4,
-      name: "Marcus Johnson",
-      role: "Technical Editor",
-      initials: "MJ"
-    }
-  ];
-
-  return (
-    <section className="team section-padding" id="team">
-      <div className="container">
-        <div className="section-header">
-          <h2 className="section-title">The <span>Editorial Team</span></h2>
-          <p className="section-subtitle">Meet the minds behind InnovateX.</p>
-        </div>
-
-        <div className="team-grid">
-          {team.map(member => (
-            <div key={member.id} className="team-card">
-              <div className="member-photo">
-                <div className="photo-placeholder">
-                  {member.initials}
-                </div>
-              </div>
-              <div className="member-info">
-                <h3>{member.name}</h3>
-                <p className="member-role">{member.role}</p>
-                <div className="member-socials">
-                  <a href="#" aria-label="LinkedIn">LI</a>
-                  <a href="#" aria-label="Twitter">X</a>
-                  <a href="#" aria-label="Email">EM</a>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-export default Team;
+export default function Team(){const{team,loading,error}=useSiteData();return <section className="team section-padding" id="team"><div className="container"><div className="section-header"><h2 className="section-title">The <span>Editorial Team</span></h2><p className="section-subtitle">Meet the people behind InnovateX.</p></div>
+ <ContentState loading={loading} error={error} empty={team.length===0?'The editorial team will be introduced here soon.':''}><div className="team-grid">{team.map(member=><article key={member.id} className="team-card"><div className="member-photo">{member.photo_url?<img src={member.photo_url} alt={member.name}/>:<div className="photo-placeholder">{member.name.split(' ').map(x=>x[0]).slice(0,2).join('').toUpperCase()}</div>}</div><div className="member-info"><h3>{member.name}</h3><p className="member-role">{member.role}</p>{member.bio&&<p>{member.bio}</p>}{member.linkedin_url&&<div className="member-socials"><a href={member.linkedin_url} target="_blank" rel="noreferrer" aria-label={`${member.name} on LinkedIn`}>LI</a></div>}</div></article>)}</div></ContentState>
+ </div></section>}

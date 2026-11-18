@@ -1,16 +1,45 @@
 # InnovateX
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Ideas. Research. Perspective.**
 
-Currently, two official plugins are available:
+InnovateX is a digital technology magazine. Its public content is powered by Supabase and managed through a private editorial dashboard.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Stack
+- React 19 + Vite
+- Supabase Auth, Postgres, Row Level Security and Storage
+- React Router
 
-## React Compiler
+## Local setup
+1. Install dependencies: `npm install`
+2. Create a Supabase project.
+3. Run `supabase/schema.sql` in the Supabase SQL Editor.
+4. Copy `.env.example` to `.env` and add the Supabase project URL and publishable/anon key.
+5. Start the site: `npm run dev`
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Admin access
+- Open `/admin/login`.
+- Public sign-ups are not provided. Create the administrator account from Supabase Authentication.
+- Copy the Auth user's UUID and run `insert into public.admin_profiles(id, role) values ('AUTH-USER-UUID', 'admin');`.
+- Only users with an `admin` profile can manage content. Database RLS policies enforce this for database and Storage operations.
 
-## Expanding the ESLint configuration
+## Editorial CMS
+The admin dashboard manages:
+- Magazine issues, cover images and PDF editions
+- Articles, article images, full text and publication state
+- Editorial team profiles and display order
+- Homepage hero, about, mission, vision, focus areas and contact details
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Public pages query published records from Supabase. Draft content is not visible to visitors. If no records have been published, the site displays an empty state rather than sample records.
+
+## Vercel deployment
+Add these environment variables in Vercel Project Settings → Environment Variables, then redeploy:
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
+
+Use the Supabase publishable/anon key only in the frontend. Never expose the service-role key in a Vite environment variable.
+
+## Scripts
+- `npm run dev` — development server
+- `npm run build` — production build
+- `npm run preview` — preview production output
+- `npm run lint` — ESLint
